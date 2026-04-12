@@ -1,0 +1,48 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  * {
+    @apply border-outline-variant;
+  }
+
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    @apply min-h-screen bg-background font-body text-on-surface antialiased;
+    background-image:
+      radial-gradient(circle at top left, rgba(255, 90, 95, 0.12), transparent 30%),
+      radial-gradient(circle at 85% 18%, rgba(122, 247, 232, 0.12), transparent 22%),
+      linear-gradient(180deg, rgba(255, 255, 255, 0.58), rgba(251, 249, 248, 0.9));
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-headline;
+  }
+}
+
+@layer components {
+  .editorial-shell {
+    position: relative;
+    overflow: clip;
+  }
+
+  .editorial-shell::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    background:
+      radial-gradient(circle at top right, rgba(255, 255, 255, 0.82), transparent 32%),
+      radial-gradient(circle at bottom left, rgba(255, 90, 95, 0.05), transparent 26%);
+    z-index: -1;
+  }
+}
