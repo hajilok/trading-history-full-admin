@@ -10,7 +10,7 @@ export default function SubmitPage() {
           navItems={[
             { href: "/history", label: "Analysis" },
             { href: "/connect", label: "Connect" },
-            { href: "/profile", label: "Settings" },
+            { href: "/settings", label: "Settings" },
           ]}
         />
       }
