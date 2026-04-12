@@ -42,7 +42,7 @@ export default function ConnectPage() {
           navItems={[
             { href: "/history", label: "Analysis" },
             { active: true, href: "/connect", label: "Connect" },
-            { href: "/profile", label: "Settings" },
+            { href: "/settings", label: "Settings" },
           ]}
         />
       }
@@ -131,7 +131,7 @@ export default function ConnectPage() {
                 <div className="mt-8 flex flex-wrap items-center gap-4">
                   <Link
                     className="inline-flex items-center gap-2 rounded-full bg-white px-5 py-3 text-sm font-bold text-[#1c1815] transition-transform active:scale-[0.99]"
-                    href="/profile"
+                    href="/settings"
                   >
                     View Documentation
                     <span className="material-symbols-outlined text-lg">arrow_forward</span>
