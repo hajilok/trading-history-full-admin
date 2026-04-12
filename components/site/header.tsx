@@ -3,11 +3,12 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
+import { isAdminPath } from "@/lib/admin-routes";
 
 export function Header() {
   const pathname = usePathname();
 
-  if (pathname === "/history" || pathname === "/submit" || pathname === "/profile") {
+  if (isAdminPath(pathname)) {
     return null;
   }
 
