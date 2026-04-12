@@ -10,7 +10,13 @@ import {
   type ReactNode,
 } from "react";
 
-import { ApiError, getCurrentUser, login as loginRequest, logout as logoutRequest } from "@/lib/api";
+import {
+  ApiError,
+  getCurrentUser,
+  login as loginRequest,
+  logout as logoutRequest,
+  setStoredAuthToken,
+} from "@/lib/api";
 import type { AuthUser } from "@/lib/api-types";
 
 type AuthStatus = "authenticated" | "loading" | "unauthenticated";
@@ -58,6 +64,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         setUser(nextUser);
       });
     } catch (nextError) {
+      setStoredAuthToken(null);
       startTransition(() => {
         setError(nextError instanceof ApiError && nextError.status === 401 ? null : getErrorMessage(nextError));
         setStatus("unauthenticated");
@@ -68,7 +75,17 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   async function login(email: string, password: string) {
     setError(null);
-    await loginRequest(email, password);
+    const loginResult = await loginRequest(email, password);
+
+    if (loginResult.user) {
+      startTransition(() => {
+        setError(null);
+        setStatus("authenticated");
+        setUser(loginResult.user);
+      });
+      return;
+    }
+
     await refresh();
   }
 

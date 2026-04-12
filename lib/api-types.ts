@@ -5,6 +5,11 @@ export type AuthUser = {
   role: string;
 };
 
+export type LoginResult = {
+  token: string | null;
+  user: AuthUser | null;
+};
+
 export type DashboardStats = {
   activeTokens: number | null;
   totalBalance: number | null;

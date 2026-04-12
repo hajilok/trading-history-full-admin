@@ -2,6 +2,7 @@ import { getApiBaseUrl } from "@/lib/env";
 import type {
   AuthUser,
   DashboardStats,
+  LoginResult,
   TokenCreateResult,
   TokenRecord,
   TradeFilters,
@@ -12,8 +13,12 @@ import type {
 type JsonObject = Record<string, unknown>;
 
 type ApiRequestOptions = Omit<RequestInit, "body"> & {
+  auth?: boolean;
   body?: BodyInit | JsonObject | null;
 };
+
+const AUTH_TOKEN_KEY = "auth_token";
+let inMemoryAuthToken: string | null = null;
 
 export class ApiError extends Error {
   status: number;
@@ -125,10 +130,17 @@ async function apiRequest<T = unknown>(path: string, options: ApiRequestOptions 
   const url = `${getApiBaseUrl()}${path}`;
   const headers = new Headers(options.headers);
   let body = options.body;
+  const auth = options.auth ?? true;
 
   if (isObject(body)) {
     headers.set("Content-Type", "application/json");
     body = JSON.stringify(body);
+  }
+
+  const authToken = auth ? getStoredAuthToken() : null;
+
+  if (authToken && !headers.has("Authorization")) {
+    headers.set("Authorization", `Bearer ${authToken}`);
   }
 
   const response = await fetch(url, {
@@ -147,6 +159,52 @@ async function apiRequest<T = unknown>(path: string, options: ApiRequestOptions 
   }
 
   return payload as T;
+}
+
+function getBrowserStorage() {
+  if (typeof window === "undefined") {
+    return null;
+  }
+
+  try {
+    return window.localStorage;
+  } catch {
+    return null;
+  }
+}
+
+export function getStoredAuthToken() {
+  if (inMemoryAuthToken) {
+    return inMemoryAuthToken;
+  }
+
+  const storage = getBrowserStorage();
+
+  if (!storage) {
+    return null;
+  }
+
+  const token = storage.getItem(AUTH_TOKEN_KEY);
+  inMemoryAuthToken = token;
+
+  return token;
+}
+
+export function setStoredAuthToken(token: string | null) {
+  inMemoryAuthToken = token;
+
+  const storage = getBrowserStorage();
+
+  if (!storage) {
+    return;
+  }
+
+  if (token) {
+    storage.setItem(AUTH_TOKEN_KEY, token);
+    return;
+  }
+
+  storage.removeItem(AUTH_TOKEN_KEY);
 }
 
 function normalizeAuthUser(payload: unknown): AuthUser {
@@ -170,6 +228,24 @@ function normalizeAuthUser(payload: unknown): AuthUser {
     id: asString(getFromObject(candidate, ["id", "userId"])),
     name,
     role,
+  };
+}
+
+function normalizeLoginResult(payload: unknown): LoginResult {
+  const root = asObject(payload);
+  const unwrapped = asObject(unwrapPayload(payload));
+  const token =
+    asString(getFromObject(unwrapped, ["token", "accessToken", "jwt"])) ??
+    asString(getFromObject(root, ["token", "accessToken", "jwt"]));
+  const userCandidate =
+    asObject(getFromObject(unwrapped, ["user", "currentUser"])) ??
+    asObject(getFromObject(root, ["user", "currentUser"])) ??
+    unwrapped ??
+    root;
+
+  return {
+    token,
+    user: userCandidate ? normalizeAuthUser(userCandidate) : null,
   };
 }
 
@@ -302,10 +378,22 @@ function normalizeTokenCreateResult(payload: unknown): TokenCreateResult {
 }
 
 export async function login(email: string, password: string) {
-  await apiRequest("/api/auth/login", {
-    body: { email, password },
-    method: "POST",
-  });
+  try {
+    const payload = await apiRequest("/api/auth/login", {
+      auth: false,
+      body: { email, password },
+      method: "POST",
+    });
+
+    const result = normalizeLoginResult(payload);
+
+    setStoredAuthToken(result.token);
+
+    return result;
+  } catch (error) {
+    setStoredAuthToken(null);
+    throw error;
+  }
 }
 
 export async function getCurrentUser() {
@@ -315,9 +403,13 @@ export async function getCurrentUser() {
 }
 
 export async function logout() {
-  await apiRequest("/api/auth/logout", {
-    method: "POST",
-  });
+  try {
+    await apiRequest("/api/auth/logout", {
+      method: "POST",
+    });
+  } finally {
+    setStoredAuthToken(null);
+  }
 }
 
 export async function getDashboardStats() {
