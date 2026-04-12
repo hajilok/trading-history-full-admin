@@ -10,27 +10,23 @@ const notificationChannels = [
 export default function SettingsPage() {
   return (
     <AdminShell topBar={<AdminTopBar profileName="Julian Vane" showSearch={false} title="Settings" />}>
-      <div className="mx-auto max-w-[1220px] space-y-12 pb-12">
+      <div className="mx-auto max-w-[1160px] space-y-12 pb-12">
         <section className="rounded-[2.5rem] bg-surface-container-low p-4 shadow-[0_24px_60px_rgba(49,32,27,0.06)]">
           <div className="grid gap-10 rounded-[2rem] bg-surface-container px-8 py-10 md:px-10 xl:grid-cols-[0.78fr_1.35fr] xl:gap-14">
             <div className="max-w-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
-                Identity
-              </p>
-              <h1 className="mt-4 text-3xl font-black tracking-tight text-on-surface md:text-4xl">
-                Profile Settings
-              </h1>
-              <p className="mt-4 text-sm leading-7 text-on-surface-variant">
-                Update your public identity and editorial persona without losing the restrained,
-                gallery-like rhythm of the admin dashboard.
+              <h1 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Profile Settings</h1>
+              <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+                Update your public identity and editorial persona.
               </p>
             </div>
 
             <div className="rounded-[2rem] bg-surface-container-lowest p-8 shadow-[0_18px_50px_rgba(49,32,27,0.05)] md:p-10">
               <div className="mb-8 flex flex-col gap-6 sm:flex-row sm:items-center">
                 <div className="relative">
-                  <div className="flex h-24 w-24 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(122,247,232,0.55),rgba(181,35,48,0.92))] text-white shadow-[0_20px_40px_rgba(181,35,48,0.18)]">
-                    <span className="material-symbols-outlined text-[2.25rem]">person</span>
+                  <div className="relative h-24 w-24 overflow-hidden rounded-[1.75rem] bg-[radial-gradient(circle_at_30%_25%,rgba(255,255,255,0.92),rgba(122,247,232,0.45)_28%,rgba(181,35,48,0.95)_80%)] shadow-[0_20px_40px_rgba(181,35,48,0.18)]">
+                    <div className="absolute inset-x-4 bottom-0 top-5 rounded-t-[1.25rem] bg-[linear-gradient(180deg,rgba(28,24,21,0.15),rgba(28,24,21,0.82))]" />
+                    <div className="absolute left-1/2 top-5 h-7 w-7 -translate-x-1/2 rounded-full bg-[#f2d5c8]" />
+                    <div className="absolute left-1/2 top-11 h-10 w-12 -translate-x-1/2 rounded-t-[1.25rem] bg-[#1f1c1a]" />
                   </div>
                   <button className="btn-gradient absolute -bottom-1 -right-1 rounded-full p-2.5 text-white shadow-[0_12px_28px_rgba(181,35,48,0.28)] transition-transform active:scale-95">
                     <span className="material-symbols-outlined text-sm">edit</span>
@@ -84,13 +80,9 @@ export default function SettingsPage() {
         <section className="rounded-[2.5rem] bg-surface-container-low p-4 shadow-[0_24px_60px_rgba(49,32,27,0.06)]">
           <div className="grid gap-10 rounded-[2rem] bg-surface-container px-8 py-10 md:px-10 xl:grid-cols-[0.78fr_1.35fr] xl:gap-14">
             <div className="max-w-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
-                Protection
-              </p>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-on-surface md:text-4xl">Security</h2>
-              <p className="mt-4 text-sm leading-7 text-on-surface-variant">
-                Protect your assets and editorial data with quiet, high-grade security protocols that
-                feel premium rather than mechanical.
+              <h2 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Security</h2>
+              <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+                Protect your assets and editorial data with high-grade security protocols.
               </p>
             </div>
 
@@ -138,13 +130,9 @@ export default function SettingsPage() {
         <section className="rounded-[2.5rem] bg-surface-container-low p-4 shadow-[0_24px_60px_rgba(49,32,27,0.06)]">
           <div className="grid gap-10 rounded-[2rem] bg-surface-container px-8 py-10 md:px-10 xl:grid-cols-[0.78fr_1.35fr] xl:gap-14">
             <div className="max-w-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
-                Regional Layer
-              </p>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-on-surface md:text-4xl">Preferences</h2>
-              <p className="mt-4 text-sm leading-7 text-on-surface-variant">
-                Tailor the atelier interface to your regional requirements while keeping alerts,
-                currency, and reporting preferences within a calm editorial layout.
+              <h2 className="text-3xl font-black tracking-tight text-on-surface md:text-4xl">Preferences</h2>
+              <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+                Tailor the Atelier interface to your regional requirements.
               </p>
             </div>
 
@@ -192,11 +180,9 @@ export default function SettingsPage() {
         <section className="rounded-[2.5rem] bg-primary/10 p-4 shadow-[0_24px_60px_rgba(181,35,48,0.06)]">
           <div className="grid gap-10 rounded-[2rem] bg-surface-container px-8 py-10 md:px-10 xl:grid-cols-[0.78fr_1.35fr] xl:gap-14">
             <div className="max-w-sm">
-              <p className="text-[10px] font-bold uppercase tracking-[0.28em] text-primary">Irreversible Actions</p>
-              <h2 className="mt-4 text-3xl font-black tracking-tight text-primary md:text-4xl">Dangerous Zone</h2>
-              <p className="mt-4 text-sm leading-7 text-on-surface-variant">
-                Irreversible actions regarding your ledger and historical archives deserve extra
-                breathing room and a clearer visual warning.
+              <h2 className="text-3xl font-black tracking-tight text-primary md:text-4xl">Dangerous Zone</h2>
+              <p className="mt-3 text-sm leading-7 text-on-surface-variant">
+                Irreversible actions regarding your ledger and historical archives.
               </p>
             </div>
 
