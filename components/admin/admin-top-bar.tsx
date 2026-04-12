@@ -1,5 +1,8 @@
+"use client";
+
 import Link from "next/link";
 
+import { useAuth } from "@/components/auth/auth-provider";
 import { cn } from "@/lib/cn";
 
 type AdminTopBarProps = {
@@ -9,6 +12,7 @@ type AdminTopBarProps = {
     label: string;
   }>;
   profileName?: string;
+  profileRole?: string;
   showSearch?: boolean;
   title?: string;
 };
@@ -16,9 +20,14 @@ type AdminTopBarProps = {
 export function AdminTopBar({
   navItems = [],
   profileName,
+  profileRole,
   showSearch = true,
   title,
 }: AdminTopBarProps) {
+  const { user } = useAuth();
+  const resolvedProfileName = profileName || user?.name;
+  const resolvedProfileRole = profileRole || user?.role;
+
   return (
     <header className="flex h-20 items-center justify-between bg-stone-50/70 px-8 shadow-sm backdrop-blur-xl">
       <div className="flex items-center gap-6">
@@ -75,12 +84,19 @@ export function AdminTopBar({
         <button className="rounded-full p-2 text-on-surface-variant transition-colors hover:bg-stone-200/50 hover:text-primary">
           <span className="material-symbols-outlined">notifications</span>
         </button>
-        {profileName ? (
+        {resolvedProfileName ? (
           <div className="flex items-center gap-2 pl-2">
             <div className="flex h-8 w-8 items-center justify-center rounded-full bg-[radial-gradient(circle_at_30%_30%,rgba(255,255,255,0.95),rgba(181,35,48,0.88))] text-white shadow-[0_10px_24px_rgba(181,35,48,0.18)]">
               <span className="material-symbols-outlined text-base">person</span>
             </div>
-            <span className="text-sm font-semibold text-on-surface">{profileName}</span>
+            <div className="leading-tight">
+              <span className="block text-sm font-semibold text-on-surface">{resolvedProfileName}</span>
+              {resolvedProfileRole ? (
+                <span className="block text-[10px] font-bold uppercase tracking-[0.24em] text-on-surface-variant">
+                  {resolvedProfileRole}
+                </span>
+              ) : null}
+            </div>
             <span className="material-symbols-outlined text-[18px] text-on-surface-variant">expand_more</span>
           </div>
         ) : (

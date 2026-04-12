@@ -1,4 +1,4 @@
-export const ADMIN_ROUTE_PREFIXES = ["/history", "/connect", "/submit", "/settings", "/profile"];
+export const ADMIN_ROUTE_PREFIXES = ["/history", "/connect", "/settings", "/profile"];
 
 export type AdminNavKey = "analysis" | "connect" | "settings";
 

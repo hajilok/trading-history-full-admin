@@ -26,8 +26,8 @@ export function ComingSoonPage({ description, eyebrow, title }: ComingSoonPagePr
 
             <div className="mt-10 flex flex-col gap-3 sm:flex-row">
               <Button href="/">Back to Home</Button>
-              <Button href="/submit" variant="secondary">
-                Explore the Shell
+              <Button href="/login" variant="secondary">
+                Open Admin Login
               </Button>
             </div>
           </div>
