@@ -71,6 +71,6 @@
   }
 
   .ghost-input {
-    @apply border border-outline-variant/20 bg-surface-container-low focus:border-primary;
+    @apply border border-outline-variant/20 bg-surface-container-low focus:border-primary focus:ring-2 focus:ring-primary/10;
   }
 }
