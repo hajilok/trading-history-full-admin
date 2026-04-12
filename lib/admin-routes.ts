@@ -1,4 +1,4 @@
-export const ADMIN_ROUTE_PREFIXES = ["/history", "/connect", "/submit", "/profile"];
+export const ADMIN_ROUTE_PREFIXES = ["/history", "/connect", "/submit", "/settings", "/profile"];
 
 export type AdminNavKey = "analysis" | "connect" | "settings";
 
@@ -25,7 +25,12 @@ export function getAdminNavKey(pathname: string | null | undefined): AdminNavKey
     return "connect";
   }
 
-  if (pathname === "/profile" || pathname.startsWith("/profile/")) {
+  if (
+    pathname === "/settings" ||
+    pathname.startsWith("/settings/") ||
+    pathname === "/profile" ||
+    pathname.startsWith("/profile/")
+  ) {
     return "settings";
   }
 

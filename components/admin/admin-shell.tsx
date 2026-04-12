@@ -24,7 +24,7 @@ type SidebarItem = {
 const sidebarItems: SidebarItem[] = [
   { href: "/history", icon: "monitoring", key: "analysis", label: "Analysis" },
   { href: "/connect", icon: "link", key: "connect", label: "Connect" },
-  { href: "/profile", icon: "settings", key: "settings", label: "Settings" },
+  { href: "/settings", icon: "settings", key: "settings", label: "Settings" },
 ];
 
 function SidebarLink({ item, isActive }: { item: SidebarItem; isActive: boolean }) {
