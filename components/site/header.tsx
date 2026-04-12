@@ -1,7 +1,16 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { Button } from "@/components/ui/button";
 
 export function Header() {
+  const pathname = usePathname();
+
+  if (pathname === "/history" || pathname === "/submit" || pathname === "/profile") {
+    return null;
+  }
+
   return (
     <header className="fixed top-0 z-50 w-full backdrop-blur-xl">
       <div className="mx-auto flex h-20 w-full max-w-[1440px] items-center justify-between px-6 md:px-12">

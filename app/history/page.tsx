@@ -1,163 +1,366 @@
 import { ProtectedRoute } from "@/components/auth/protected-route";
 
-const trades = [
+const stats = [
   {
-    ticker: "NVDA",
-    position: "Long",
-    date: "12 Apr 2026",
-    note: "Momentum continuation after earnings expansion.",
-    pnl: "+$3,280.00",
-    value: "$42,180",
-    positionTone: "bg-secondary-fixed text-secondary",
-    pnlTone: "text-secondary",
+    label: "Total PnL",
+    value: "$2.48M",
+    detail: "Growth vs last month",
+    accent: (
+      <span className="flex items-center gap-1 text-sm font-bold text-secondary">
+        <span className="material-symbols-outlined text-sm">trending_up</span>
+        12.4%
+      </span>
+    ),
   },
   {
-    ticker: "TSLA",
-    position: "Short",
-    date: "10 Apr 2026",
-    note: "Fade trade on overextended intraday move.",
-    pnl: "-$940.00",
-    value: "$18,420",
-    positionTone: "bg-primary-fixed text-primary",
-    pnlTone: "text-primary",
+    label: "Balance",
+    value: "$412.9M",
+    detail: "Total settled trades (24h)",
   },
   {
-    ticker: "AAPL",
-    position: "Long",
-    date: "08 Apr 2026",
-    note: "Swing position managed with staged exits.",
-    pnl: "+$1,860.00",
-    value: "$27,950",
-    positionTone: "bg-secondary-fixed text-secondary",
-    pnlTone: "text-secondary",
+    label: "Active Tokens",
+    value: "1,284",
+    detail: "API keys in execution",
+    accent: <span className="ml-2 inline-block h-2 w-2 rounded-full bg-secondary align-middle" />,
+  },
+  {
+    label: "Winrate",
+    value: "99.98%",
+    detail: "Valid submissions ratio",
   },
 ];
 
-const ribbonHeights = ["48%", "38%", "58%", "62%", "76%", "70%", "88%", "100%"];
+const trades = [
+  {
+    symbol: "ETH/USD",
+    type: "BUY",
+    typeClassName: "bg-secondary-container text-on-secondary-container",
+    margin: "1,500 USDT",
+    leverage: "20x",
+    pnl: "+$420.50",
+    pnlClassName: "text-secondary",
+    status: "Success",
+    statusDotClassName: "bg-secondary",
+    statusTextClassName: "text-secondary",
+  },
+  {
+    symbol: "SOL/USDT",
+    type: "SELL",
+    typeClassName: "bg-primary-fixed text-on-primary-fixed-variant",
+    margin: "2,800 USDT",
+    leverage: "10x",
+    pnl: "-$125.20",
+    pnlClassName: "text-primary",
+    status: "Pending",
+    statusDotClassName: "bg-amber-400",
+    statusTextClassName: "text-amber-600",
+  },
+  {
+    symbol: "BTC/USD",
+    type: "BUY",
+    typeClassName: "bg-secondary-container text-on-secondary-container",
+    margin: "5,000 USDT",
+    leverage: "50x",
+    pnl: "+$1,280.00",
+    pnlClassName: "text-secondary",
+    status: "Success",
+    statusDotClassName: "bg-secondary",
+    statusTextClassName: "text-secondary",
+  },
+  {
+    symbol: "AVAX/USD",
+    type: "BUY",
+    typeClassName: "bg-secondary-container text-on-secondary-container",
+    margin: "800 USDT",
+    leverage: "5x",
+    pnl: "+$45.15",
+    pnlClassName: "text-secondary",
+    status: "Success",
+    statusDotClassName: "bg-secondary",
+    statusTextClassName: "text-secondary",
+  },
+];
+
+function SidebarLink({
+  icon,
+  label,
+  active = false,
+}: {
+  icon: string;
+  label: string;
+  active?: boolean;
+}) {
+  if (active) {
+    return (
+      <a
+        className="flex items-center gap-3 rounded-xl bg-stone-100 px-4 py-3 font-bold text-primary transition-all duration-150 active:scale-95"
+        href="#"
+      >
+        <span className="material-symbols-outlined text-xl"> {icon}</span>
+        <span className="text-sm">{label}</span>
+        <span className="ml-auto h-10 w-1 rounded-full bg-primary-container" />
+      </a>
+    );
+  }
+
+  return (
+    <a
+      className="flex items-center gap-3 rounded-xl px-4 py-3 font-medium text-stone-500 transition-colors duration-150 hover:bg-stone-200/50 active:scale-95"
+      href="#"
+    >
+      <span className="material-symbols-outlined text-xl">{icon}</span>
+      <span className="text-sm">{label}</span>
+    </a>
+  );
+}
 
 export default function HistoryPage() {
   return (
     <ProtectedRoute>
-      <main className="px-6 pb-16 pt-28 md:px-12">
-        <div className="mx-auto flex w-full max-w-[1440px] flex-col gap-10">
-          <section className="rounded-[2rem] bg-surface-container-low p-6 md:p-8">
-            <div className="grid gap-6 lg:grid-cols-[1.15fr_0.85fr]">
-              <div className="space-y-4">
-                <span className="inline-flex rounded-full bg-primary-fixed px-4 py-1.5 text-xs font-bold uppercase tracking-[0.28em] text-on-primary-fixed">
-                  Editorial Dashboard
+      <div className="min-h-screen bg-surface text-on-surface">
+        <aside className="fixed left-0 top-0 z-50 flex h-full w-64 flex-col bg-stone-50 px-6 py-8">
+          <div className="mb-10 px-2">
+            <h1 className="text-2xl font-black tracking-editorial text-primary">The Ledger</h1>
+            <p className="mt-1 text-[10px] font-bold uppercase tracking-[0.2em] text-on-surface-variant">
+              Premium Tier
+            </p>
+          </div>
+
+          <nav className="flex-1 space-y-1">
+            <SidebarLink active icon="insights" label="Analysis" />
+            <SidebarLink icon="link" label="Connect" />
+            <SidebarLink icon="settings" label="Settings" />
+          </nav>
+
+          <div className="mt-auto px-2">
+            <div className="mb-6 flex items-center gap-3 rounded-2xl bg-surface-container-low p-3">
+              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-800 text-white">
+                <span className="material-symbols-outlined text-lg">person</span>
+              </div>
+              <div className="overflow-hidden">
+                <p className="truncate text-sm font-bold">Alexander Vance</p>
+                <p className="truncate text-xs text-on-surface-variant">Lead Administrator</p>
+              </div>
+            </div>
+            <button className="w-full rounded-full bg-surface-container-highest py-3 text-sm font-bold text-on-surface transition-colors duration-150 hover:bg-stone-200 active:scale-95">
+              Export History
+            </button>
+          </div>
+        </aside>
+
+        <main className="ml-64 min-h-screen">
+          <header className="sticky top-0 z-40 flex h-20 w-full items-center justify-between bg-white/70 px-12 shadow-sm backdrop-blur-xl">
+            <div className="flex items-center gap-8">
+              <div className="group relative">
+                <span className="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-lg text-on-surface-variant">
+                  search
                 </span>
-                <div>
-                  <p className="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
-                    Net Profit
-                  </p>
-                  <h1 className="mt-3 font-headline text-5xl font-extrabold tracking-editorial text-on-surface md:text-6xl">
-                    $18,640.45
-                  </h1>
-                  <p className="mt-4 max-w-xl text-base leading-7 text-on-surface-variant md:text-lg">
-                    A calmer, paper-layered review of your open and closed positions, with emphasis
-                    on portfolio shape instead of dense grids.
-                  </p>
-                </div>
+                <input
+                  className="w-64 rounded-full bg-surface-container-low py-2 pl-10 pr-4 text-sm transition-all focus:ring-2 focus:ring-primary-container focus:outline-none"
+                  placeholder="Search accounts, assets..."
+                  type="text"
+                />
               </div>
 
-              <div className="bento-shadow rounded-[2rem] bg-surface-container-lowest p-6">
-                <div className="flex items-center justify-between">
-                  <div>
-                    <p className="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
-                      Performance Ribbon
-                    </p>
-                    <p className="mt-2 text-sm text-on-surface-variant">
-                      Equity growth across your recent journal window.
-                    </p>
-                  </div>
-                  <span className="rounded-full bg-secondary-fixed px-3 py-1 text-xs font-semibold text-secondary">
-                    +12.4%
-                  </span>
-                </div>
-
-                <div className="mt-8 flex h-28 items-end gap-2 overflow-hidden rounded-[1.5rem] bg-surface-container p-4">
-                  {ribbonHeights.map((height, index) => (
-                    <div
-                      className="flex-1 rounded-t-sm bg-secondary"
-                      key={height}
-                      style={{ height, opacity: 0.24 + index * 0.08 }}
-                    />
-                  ))}
-                </div>
-              </div>
+              <nav className="hidden items-center gap-8 font-label text-sm font-medium tracking-wide lg:flex">
+                <a className="text-stone-600 transition-all hover:text-primary-container" href="#">
+                  Overview
+                </a>
+                <a className="border-b-2 border-primary-container pb-1 text-primary" href="#">
+                  Calendar
+                </a>
+                <a className="text-stone-600 transition-all hover:text-primary-container" href="#">
+                  Reports
+                </a>
+              </nav>
             </div>
-          </section>
 
-          <section className="rounded-[2rem] bg-surface-container-low p-6 md:p-8">
-            <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
+            <div className="flex items-center gap-6">
+              <button className="p-2 text-on-surface-variant transition-colors hover:text-primary">
+                <span className="material-symbols-outlined">notifications</span>
+              </button>
+              <button className="p-2 text-on-surface-variant transition-colors hover:text-primary">
+                <span className="material-symbols-outlined">account_circle</span>
+              </button>
+            </div>
+          </header>
+
+          <div className="mx-auto max-w-[1600px] px-12 py-8">
+            <div className="mb-10 flex flex-col gap-5 xl:flex-row xl:items-end xl:justify-between">
               <div>
-                <p className="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
-                  Trade Journal
+                <p className="mb-2 text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
+                  System Control
                 </p>
-                <h2 className="mt-3 font-headline text-3xl font-extrabold tracking-tight text-on-surface">
-                  Recent positions with editorial spacing
-                </h2>
+                <h2 className="font-headline text-4xl font-extrabold tracking-tight">Admin Overview</h2>
               </div>
 
-              <div className="flex w-full flex-col gap-3 md:w-auto md:flex-row">
-                <input
-                  className="ghost-input min-w-[220px] rounded-full px-5 py-3 text-sm text-on-surface placeholder:text-stone-400 focus:outline-none focus:ring-0"
-                  placeholder="Filter by ticker"
-                  type="text"
-                />
-                <input
-                  className="ghost-input min-w-[220px] rounded-full px-5 py-3 text-sm text-on-surface placeholder:text-stone-400 focus:outline-none focus:ring-0"
-                  placeholder="Portfolio or date range"
-                  type="text"
-                />
+              <div className="flex flex-wrap items-center gap-2 rounded-full bg-surface-container-lowest p-1 shadow-sm">
+                <button className="rounded-full bg-surface-container-high px-5 py-2 text-sm font-semibold">
+                  Last 30 Days
+                </button>
+                <button className="rounded-full px-5 py-2 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-low">
+                  Quarterly
+                </button>
+                <button className="flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-on-surface-variant transition-colors hover:bg-surface-container-low">
+                  <span className="material-symbols-outlined text-lg">calendar_today</span>
+                  Custom
+                </button>
               </div>
             </div>
 
-            <div className="mt-10 space-y-6">
-              {trades.map((trade) => (
-                <article
-                  className="bento-shadow rounded-[2rem] bg-surface-container-lowest p-6 transition-all duration-300 hover:bg-surface-bright"
-                  key={`${trade.ticker}-${trade.date}`}
+            <section className="mb-12 grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-4">
+              {stats.map((stat) => (
+                <div
+                  className="rounded-3xl bg-surface-container-lowest p-8 transition-all duration-200 hover:-translate-y-1"
+                  key={stat.label}
                 >
-                  <div className="flex flex-col gap-5 lg:flex-row lg:items-start lg:justify-between">
-                    <div className="space-y-4">
-                      <div className="flex flex-wrap items-center gap-3">
-                        <h3 className="font-headline text-2xl font-bold text-on-surface">
-                          {trade.ticker}
-                        </h3>
-                        <span
-                          className={`rounded-full px-3 py-1 text-xs font-semibold ${trade.positionTone}`}
-                        >
-                          {trade.position}
-                        </span>
-                        <span className="text-sm text-on-surface-variant">{trade.date}</span>
-                      </div>
-                      <p className="max-w-2xl text-base leading-7 text-on-surface-variant">
-                        {trade.note}
-                      </p>
-                    </div>
+                  <p className="mb-4 text-xs font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                    {stat.label}
+                  </p>
+                  <div className="mb-2 flex items-baseline gap-2">
+                    <span className="font-headline text-4xl font-black text-on-surface">{stat.value}</span>
+                    {stat.accent ?? null}
+                  </div>
+                  <p className="text-xs font-medium text-on-surface-variant">{stat.detail}</p>
+                </div>
+              ))}
+            </section>
 
-                    <div className="grid gap-5 text-left md:grid-cols-2 md:text-right">
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
-                          Position Value
-                        </p>
-                        <p className="mt-2 text-xl font-semibold text-on-surface">{trade.value}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs font-bold uppercase tracking-[0.3em] text-on-surface-variant">
-                          P&amp;L
-                        </p>
-                        <p className={`mt-2 text-xl font-semibold ${trade.pnlTone}`}>{trade.pnl}</p>
-                      </div>
+            <section className="grid grid-cols-1 gap-8">
+              <div className="w-full">
+                <div className="overflow-hidden rounded-3xl bg-surface-container-lowest">
+                  <div className="flex items-center justify-between bg-white/50 px-8 py-6">
+                    <h3 className="font-headline text-xl font-bold">Global Trading History</h3>
+                    <div className="flex gap-2">
+                      <button className="rounded-lg bg-surface-container p-2 transition-colors hover:bg-surface-container-high">
+                        <span className="material-symbols-outlined text-lg">filter_list</span>
+                      </button>
+                      <button className="rounded-lg bg-surface-container p-2 transition-colors hover:bg-surface-container-high">
+                        <span className="material-symbols-outlined text-lg">download</span>
+                      </button>
                     </div>
                   </div>
-                </article>
-              ))}
+
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse text-left">
+                      <thead>
+                        <tr className="bg-surface-container-low/50">
+                          <th className="px-8 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            Symbol
+                          </th>
+                          <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            Type
+                          </th>
+                          <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            Margin
+                          </th>
+                          <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            Lev
+                          </th>
+                          <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            PnL
+                          </th>
+                          <th className="px-6 py-4 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                            Status
+                          </th>
+                          <th className="px-8 py-4 text-right" />
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-surface-container-low">
+                        {trades.map((trade) => (
+                          <tr
+                            className="group transition-colors hover:bg-surface-bright"
+                            key={`${trade.symbol}-${trade.margin}`}
+                          >
+                            <td className="px-8 py-6 text-sm font-bold">{trade.symbol}</td>
+                            <td className="px-6 py-6">
+                              <span
+                                className={`rounded-full px-3 py-1 text-[10px] font-bold ${trade.typeClassName}`}
+                              >
+                                {trade.type}
+                              </span>
+                            </td>
+                            <td className="px-6 py-6 text-sm font-medium text-on-surface-variant">
+                              {trade.margin}
+                            </td>
+                            <td className="px-6 py-6 text-sm text-on-surface-variant">{trade.leverage}</td>
+                            <td className={`px-6 py-6 text-sm font-bold ${trade.pnlClassName}`}>{trade.pnl}</td>
+                            <td className="px-6 py-6">
+                              <div className="flex items-center gap-2">
+                                <span className={`h-1.5 w-1.5 rounded-full ${trade.statusDotClassName}`} />
+                                <span className={`text-xs font-medium ${trade.statusTextClassName}`}>
+                                  {trade.status}
+                                </span>
+                              </div>
+                            </td>
+                            <td className="px-8 py-6 text-right">
+                              <button className="rounded-full p-2 opacity-0 transition-all group-hover:opacity-100 hover:bg-surface-container">
+                                <span className="material-symbols-outlined text-lg">more_horiz</span>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+
+                  <div className="flex items-center justify-between bg-white/30 px-8 py-6">
+                    <span className="text-xs font-medium text-on-surface-variant">
+                      Showing 1-10 of 2,482 transactions
+                    </span>
+                    <div className="flex gap-2">
+                      <button className="rounded-lg border border-surface-container px-4 py-2 text-xs font-bold transition-colors hover:bg-surface-container-low">
+                        Previous
+                      </button>
+                      <button className="rounded-lg border border-surface-container px-4 py-2 text-xs font-bold transition-colors hover:bg-surface-container-low">
+                        Next
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <div className="px-12 pb-12">
+            <div className="rounded-3xl bg-surface-container p-1">
+              <div className="flex items-center gap-8 overflow-hidden rounded-[1.25rem] bg-surface-container-lowest p-6">
+                <div className="shrink-0">
+                  <p className="mb-1 text-[10px] font-bold uppercase tracking-[0.28em] text-on-surface-variant">
+                    Global 24h Trend
+                  </p>
+                  <div className="flex items-center gap-2">
+                    <span className="font-headline text-2xl font-black text-secondary">+4.12%</span>
+                    <span className="material-symbols-outlined text-secondary">show_chart</span>
+                  </div>
+                </div>
+
+                <div className="relative h-12 flex-grow">
+                  <svg className="h-full w-full" preserveAspectRatio="none" viewBox="0 0 1000 100">
+                    <defs>
+                      <linearGradient id="gradient-teal" x1="0%" x2="0%" y1="0%" y2="100%">
+                        <stop offset="0%" stopColor="rgba(0,106,98,0.2)" />
+                        <stop offset="100%" stopColor="rgba(0,106,98,0)" />
+                      </linearGradient>
+                    </defs>
+                    <path
+                      d="M0,80 Q50,70 100,75 T200,60 T300,85 T400,40 T500,55 T600,20 T700,45 T800,10 T900,35 T1000,5"
+                      fill="none"
+                      stroke="#006a62"
+                      strokeLinecap="round"
+                      strokeWidth="3"
+                    />
+                    <path
+                      d="M0,80 Q50,70 100,75 T200,60 T300,85 T400,40 T500,55 T600,20 T700,45 T800,10 T900,35 T1000,5 L1000,100 L0,100 Z"
+                      fill="url(#gradient-teal)"
+                    />
+                  </svg>
+                </div>
+              </div>
             </div>
-          </section>
-        </div>
-      </main>
+          </div>
+        </main>
+      </div>
     </ProtectedRoute>
   );
 }

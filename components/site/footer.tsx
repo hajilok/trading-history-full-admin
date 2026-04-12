@@ -1,4 +1,7 @@
+"use client";
+
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 
 const footerLinks = [
   { href: "#", label: "Privacy Policy" },
@@ -8,6 +11,12 @@ const footerLinks = [
 ];
 
 export function Footer() {
+  const pathname = usePathname();
+
+  if (pathname === "/history" || pathname === "/submit" || pathname === "/profile") {
+    return null;
+  }
+
   return (
     <footer className="mt-auto w-full bg-surface-container-low px-8 py-16 md:px-24">
       <div className="mx-auto flex max-w-[1440px] flex-col items-center justify-between gap-8 md:flex-row">
