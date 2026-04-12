@@ -161,7 +161,7 @@ function normalizeAuthUser(payload: unknown): AuthUser {
   const email = asString(getFromObject(candidate, ["email"]));
   const role = asString(getFromObject(candidate, ["role", "userRole"])) || "Admin";
   const name =
-    asString(getFromObject(candidate, ["name", "fullName", "username", "displayName"])) ||
+    asString(getFromObject(candidate, ["name", "fullName", "fullname", "username", "displayName"])) ||
     email ||
     "Administrator";
 
