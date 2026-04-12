@@ -28,8 +28,8 @@ export function Header() {
           <button className="hidden font-headline text-sm font-medium text-stone-500 transition-colors hover:text-primary-container md:block">
             Support
           </button>
-          <Button className="btn-gradient bento-shadow font-headline font-bold" size="sm">
-            Create Account
+          <Button className="btn-gradient bento-shadow font-headline font-bold" href="/login" size="sm">
+            Login
           </Button>
         </div>
       </div>
