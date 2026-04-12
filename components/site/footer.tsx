@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { isAdminPath } from "@/lib/admin-routes";
 
 const footerLinks = [
   { href: "#", label: "Privacy Policy" },
@@ -13,7 +14,7 @@ const footerLinks = [
 export function Footer() {
   const pathname = usePathname();
 
-  if (pathname === "/history" || pathname === "/submit" || pathname === "/profile") {
+  if (isAdminPath(pathname)) {
     return null;
   }
 
