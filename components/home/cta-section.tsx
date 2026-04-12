@@ -18,7 +18,7 @@ export function CtaSection() {
               premium review experience.
             </p>
             <div className="mt-10 flex flex-col justify-center gap-3 sm:flex-row">
-              <Button className="bg-white text-primary hover:bg-surface-bright" href="/submit" size="lg">
+              <Button className="bg-white text-primary hover:bg-surface-bright" href="/login" size="lg">
                 Open Your Ledger
               </Button>
               <Button href="/history" size="lg" variant="outline">

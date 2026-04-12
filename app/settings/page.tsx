@@ -9,7 +9,7 @@ const notificationChannels = [
 
 export default function SettingsPage() {
   return (
-    <AdminShell topBar={<AdminTopBar profileName="Julian Vane" showSearch={false} title="Settings" />}>
+    <AdminShell topBar={<AdminTopBar showSearch={false} title="Settings" />}>
       <div className="mx-auto max-w-[1160px] space-y-12 pb-12">
         <section className="rounded-[2.5rem] bg-surface-container-low p-4 shadow-[0_24px_60px_rgba(49,32,27,0.06)]">
           <div className="grid gap-10 rounded-[2rem] bg-surface-container px-8 py-10 md:px-10 xl:grid-cols-[0.78fr_1.35fr] xl:gap-14">

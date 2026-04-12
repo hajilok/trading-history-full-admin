@@ -3,14 +3,9 @@
 import { FormEvent, useEffect, useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 
-import {
-  AUTH_SESSION_KEY,
-  MOCK_AUTH_EMAIL,
-  MOCK_AUTH_PASSWORD,
-  buildAuthSession,
-  getSafeRedirect,
-  isMockCredential,
-} from "@/lib/auth";
+import { useAuth } from "@/components/auth/auth-provider";
+import { ApiError } from "@/lib/api";
+import { getSafeRedirect } from "@/lib/auth";
 
 type LoginFormProps = {
   nextPath?: string;
@@ -18,6 +13,7 @@ type LoginFormProps = {
 
 export function LoginForm({ nextPath = "/history" }: LoginFormProps) {
   const router = useRouter();
+  const { login, status } = useAuth();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -27,27 +23,28 @@ export function LoginForm({ nextPath = "/history" }: LoginFormProps) {
   const safeNextPath = getSafeRedirect(nextPath);
 
   useEffect(() => {
-    const existingSession = window.localStorage.getItem(AUTH_SESSION_KEY);
-
-    if (existingSession) {
+    if (status === "authenticated") {
       router.replace(safeNextPath);
     }
-  }, [router, safeNextPath]);
+  }, [router, safeNextPath, status]);
 
-  function handleSubmit(event: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setError(null);
 
-    if (!isMockCredential(email, password)) {
-      setError("The credentials do not match our current editorial access preview.");
-      return;
+    try {
+      await login(email, password);
+      startTransition(() => {
+        router.replace(safeNextPath);
+      });
+    } catch (nextError) {
+      if (nextError instanceof ApiError && nextError.status === 401) {
+        setError("Invalid email or password.");
+        return;
+      }
+
+      setError(nextError instanceof ApiError ? nextError.message : "We could not sign you in.");
     }
-
-    window.localStorage.setItem(AUTH_SESSION_KEY, buildAuthSession(email));
-
-    startTransition(() => {
-      router.replace(safeNextPath);
-    });
   }
 
   return (
@@ -117,22 +114,12 @@ export function LoginForm({ nextPath = "/history" }: LoginFormProps) {
 
           <button
             className="btn-gradient bento-shadow w-full rounded-full py-4 font-headline font-bold text-white transition-transform active:scale-95 disabled:cursor-wait disabled:opacity-90"
-            disabled={isPending}
+            disabled={isPending || status === "loading"}
             type="submit"
           >
-            {isPending ? "Opening Dashboard..." : "Login"}
+            {isPending || status === "loading" ? "Opening Dashboard..." : "Login"}
           </button>
         </form>
-
-        <div className="mt-8 space-y-3 text-center">
-          <p className="text-xs uppercase tracking-[0.24em] text-on-surface-variant">
-            Preview credentials
-          </p>
-          <p className="text-sm leading-6 text-on-surface-variant">
-            Use <span className="font-semibold text-on-surface">{MOCK_AUTH_EMAIL}</span> and{" "}
-            <span className="font-semibold text-on-surface">{MOCK_AUTH_PASSWORD}</span>.
-          </p>
-        </div>
       </div>
 
       <div className="mt-12 flex justify-center opacity-40">

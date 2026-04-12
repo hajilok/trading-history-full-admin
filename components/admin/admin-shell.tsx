@@ -2,8 +2,11 @@
 
 import Link from "next/link";
 import type { ReactNode } from "react";
+import { useState, useTransition } from "react";
 import { usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
+import { useAuth } from "@/components/auth/auth-provider";
 import { ProtectedRoute } from "@/components/auth/protected-route";
 import { getAdminNavKey, type AdminNavKey } from "@/lib/admin-routes";
 import { cn } from "@/lib/cn";
@@ -29,7 +32,6 @@ const sidebarItems: SidebarItem[] = [
 
 const utilityItems = [
   { href: "#", icon: "help_outline", label: "Help Center" },
-  { href: "/login", icon: "logout", label: "Logout" },
 ];
 
 function SidebarLink({ item, isActive }: { item: SidebarItem; isActive: boolean }) {
@@ -57,7 +59,24 @@ function SidebarLink({ item, isActive }: { item: SidebarItem; isActive: boolean 
 
 export function AdminShell({ children, footer, topBar }: AdminShellProps) {
   const pathname = usePathname();
+  const router = useRouter();
+  const { logout } = useAuth();
   const activeKey = getAdminNavKey(pathname);
+  const [logoutError, setLogoutError] = useState<string | null>(null);
+  const [isLoggingOut, startLogoutTransition] = useTransition();
+
+  async function handleLogout() {
+    setLogoutError(null);
+
+    try {
+      await logout();
+      startLogoutTransition(() => {
+        router.replace("/login");
+      });
+    } catch (error) {
+      setLogoutError(error instanceof Error ? error.message : "We could not sign you out.");
+    }
+  }
 
   return (
     <ProtectedRoute>
@@ -77,9 +96,9 @@ export function AdminShell({ children, footer, topBar }: AdminShellProps) {
           </nav>
 
           <div className="px-4 pb-6">
-            <button className="btn-gradient bento-shadow w-full rounded-full py-3 text-sm font-bold text-white transition-transform active:scale-[0.98]">
-              New Trade
-            </button>
+            <div className="rounded-[1.5rem] bg-surface-container-low px-4 py-4 text-sm text-on-surface-variant">
+              Trade ingestion is handled by the Openclaw webhook. Manual submit is unavailable in this build.
+            </div>
           </div>
 
           <div className="mt-auto bg-stone-100/70 px-2 pt-4">
@@ -93,6 +112,16 @@ export function AdminShell({ children, footer, topBar }: AdminShellProps) {
                 {item.label}
               </Link>
             ))}
+            <button
+              className="flex w-full items-center gap-3 rounded-xl px-4 py-3 text-left font-body text-sm tracking-tight text-stone-500 transition-all duration-200 hover:bg-stone-200/60 hover:text-on-surface disabled:cursor-wait disabled:opacity-70"
+              disabled={isLoggingOut}
+              onClick={() => void handleLogout()}
+              type="button"
+            >
+              <span className="material-symbols-outlined text-[20px]">logout</span>
+              {isLoggingOut ? "Signing out..." : "Logout"}
+            </button>
+            {logoutError ? <p className="px-4 pt-2 text-xs text-primary">{logoutError}</p> : null}
           </div>
         </aside>
 
